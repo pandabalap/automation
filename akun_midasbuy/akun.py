@@ -46,6 +46,7 @@ def log_in():
     time.sleep(0.5)
     input_pass = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[1]/div[2]/div[2]/div/input')))
     input_pass.send_keys(input(f"Input Password : "))
+    time.sleep(0.5)
 
 
 close_pop_up()
