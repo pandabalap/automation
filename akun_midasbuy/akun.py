@@ -29,43 +29,32 @@ def close_pop_up():
     for i in range(1):
         driver.get('https://www.midasbuy.com/midasbuy/id/buy/pubgm')
 
-        try:
-            # WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.XPATH, '//*[@id="root"]/div/div[13]')))
-            # print("pop up 1 muncul!")
-
-            # driver.find_element(By.CLASS_NAME, "PatFacePopWrapper_close-btn__erWAb").click()
-            # print("pop up close!")
-
-            WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.XPATH, '//*[@id="app"]/html/body/div[4]')))
-            print("pop up 2 muncul !")
+        try: 
             
-            driver.find_element(By.CLASS_NAME, "cumulativeRecharge-close_1TD7P").click()
+            #WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "//iframe[contains(@src, 'midasbuy.com/act/pagedoo/')]")))
+            WebDriverWait(driver, 3).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe[@src='https://www.midasbuy.com/act/pagedoo/Activity_1731314030_YUWMUZ/pc/index.html?from=&lan=id&country=id']")))
+
+            # WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'cumulativeRecharge-close')]")))
+            close_pop_up_2 = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "cumulativeRecharge-close_1TD7P")))
+            close_pop_up_2.click()
             print("pop up 2 close!")
 
         except TimeoutException:
-            print("gagal close pop up!")
+            print("gagal close pop up 2 !")
             pass
 
+        driver.switch_to.default_content()
 
-    #     def close_all_popup(driver, ref_id):
-    # try:
+        try:
+            WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.XPATH, '//*[@id="root"]/div/div[13]')))
 
-    #     iframe = WebDriverWait(driver, 3).until(
-    #     EC.presence_of_element_located((By.XPATH, "//iframe[contains(@src, 'midasbuy.com/act/pagedoo/')]")))
+            close_pop_up_1 = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "PatFacePopWrapper_close-btn__erWAb")))
+            close_pop_up_1.click()
+            print("pop up 1 close!")
 
-    #     driver.switch_to.frame(iframe)
-
-    #     cumulative_recharge_close = WebDriverWait(driver, 1).until(
-    #     EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'cumulativeRecharge-close')]")))
-
-    #     cumulative_recharge_close.click()
-    #     logger.info(f'pubg_worker {ref_id} | close CumulativeRecharge popup 1  !!!')
-
-    # except Exception as e:
-    #     pass
-
-    # finally:
-    #     driver.switch_to.default_content()
+        except TimeoutException:
+            print("gagal close pop up 1 !")
+            pass
         
 def log_in():
     driver.find_element(By.XPATH, '//*[@id="MobileNav"]/div/div[2]/div[6]').click()
@@ -93,6 +82,12 @@ def log_in():
     date_input.send_keys(random_date)
     print("tanggal Oke !")
     time.sleep(0.5)
+
+    cek_box = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[1]/div[5]/div[1]/div/div[1]')))
+    cek_box.click()
+
+    verif_email =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[2]/div')))
+    verif_email.click()
 
 close_pop_up()
 log_in()
