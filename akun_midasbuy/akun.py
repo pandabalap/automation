@@ -45,6 +45,28 @@ def close_pop_up():
         except TimeoutException:
             print("gagal close pop up!")
             pass
+
+
+    #     def close_all_popup(driver, ref_id):
+    # try:
+
+    #     iframe = WebDriverWait(driver, 3).until(
+    #     EC.presence_of_element_located((By.XPATH, "//iframe[contains(@src, 'midasbuy.com/act/pagedoo/')]")))
+
+    #     driver.switch_to.frame(iframe)
+
+    #     cumulative_recharge_close = WebDriverWait(driver, 1).until(
+    #     EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'cumulativeRecharge-close')]")))
+
+    #     cumulative_recharge_close.click()
+    #     logger.info(f'pubg_worker {ref_id} | close CumulativeRecharge popup 1  !!!')
+
+    # except Exception as e:
+    #     pass
+
+    # finally:
+    #     driver.switch_to.default_content()
+        
 def log_in():
     driver.find_element(By.XPATH, '//*[@id="MobileNav"]/div/div[2]/div[6]').click()
     time.sleep(0.5)
