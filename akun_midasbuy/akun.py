@@ -17,7 +17,7 @@ driver = webdriver.Chrome(options=options)
 email_list_file = "email.txt"
 
 with open(email_list_file, "r") as file:
-    email_list = [line.strip() for line in file if line.stri()]
+    email_list = [line.strip() for line in file if line.strip()]
 
 def generate_random_date():
     start_date = datetime(1990, 1, 1)
@@ -92,19 +92,29 @@ def log_in():
     verif_email =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[2]/div')))
     verif_email.click()
 
-try:
-    for email in email_list:
-        driver.get('https://www.midasbuy.com/midasbuy/id/buy/pubgm')
+for email in email_list:
+    driver.get('https://www.midasbuy.com/midasbuy/id/buy/pubgm')
 
-    close_pop_up()
-    log_in()
-    print(f"Proses untuk email {email} selesai. Masukkan 'next' Untuk lanjut.")
+def main_prosess():
     while True:
-        user_input = input("Input: ").strip().lower()
-        if user_input =="next":
-            break
-        else:
-            print("Masukkan 'next' untuk lanjut !")
 
-finally:
-    driver.quit()
+        close_pop_up()
+        log_in()
+        print(f"Proses untuk email {email} selesai. Masukkan 'next' Untuk lanjut.")
+        while True:
+            user_input = input("Input: ").strip().lower()
+            if user_input =="neh":
+                break
+            elif user_input =="wes":
+                print("proses dihentikan")
+                return
+            else:
+                print("Masukkan 'next' untuk lanjut dan 'stop' untuk berhenti!")
+
+        print("WES BAR COK ! SESUK NEH !")
+        user_input = input("Njalukmu opo cok : ").strip().lower()
+        if user_input == "wes":
+            print("proses dihentikan")
+            return
+
+main_prosess()
