@@ -14,6 +14,11 @@ options.add_experimental_option('detach', True)
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 driver = webdriver.Chrome(options=options)
 
+email_list_file = "email.txt"
+
+with open(email_list_file, "r") as file:
+    email_list = [line.strip() for line in file if line.stri()]
+
 def generate_random_date():
     start_date = datetime(1990, 1, 1)
     end_date = datetime(1999, 12, 31)
@@ -27,8 +32,6 @@ driver.implicitly_wait(10)
 
 def close_pop_up():
     for i in range(1):
-        driver.get('https://www.midasbuy.com/midasbuy/id/buy/pubgm')
-
         try: 
             
             #WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "//iframe[contains(@src, 'midasbuy.com/act/pagedoo/')]")))
@@ -64,7 +67,7 @@ def log_in():
     try:
         driver.switch_to.frame('login-iframe')
         input_email = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div/div[3]/div/div/div/div[1]/p/input')))
-        input_email.send_keys(input(f"Input Email : "))
+        input_email.send_keys(email)
         print("Berhasil Input Email !")
 
     except TimeoutException :
@@ -89,5 +92,19 @@ def log_in():
     verif_email =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[2]/div')))
     verif_email.click()
 
-close_pop_up()
-log_in()
+try:
+    for email in email_list:
+        driver.get('https://www.midasbuy.com/midasbuy/id/buy/pubgm')
+
+    close_pop_up()
+    log_in()
+    print(f"Proses untuk email {email} selesai. Masukkan 'next' Untuk lanjut.")
+    while True:
+        user_input = input("Input: ").strip().lower()
+        if user_input =="next":
+            break
+        else:
+            print("Masukkan 'next' untuk lanjut !")
+
+finally:
+    driver.quit()
