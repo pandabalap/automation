@@ -9,15 +9,18 @@ import random
 from datetime import datetime, timedelta
 import time
 
-options = webdriver.ChromeOptions()
-options.add_experimental_option('detach', True)
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
-driver = webdriver.Chrome(options=options)
 
-email_list_file = "email.txt"
+def create_driver():
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option('detach', True)
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(10)
+    return driver
 
-with open(email_list_file, "r") as file:
-    email_list = [line.strip() for line in file if line.strip()]
+def read_email_list(file_path):
+    with open(file_path, "r") as file:
+        return [line.strip() for line in file if line.strip()]
 
 def generate_random_date():
     start_date = datetime(1990, 1, 1)
@@ -28,10 +31,9 @@ def generate_random_date():
     random_date = start_date + timedelta(days=random_days)
     return random_date.strftime("%d %m %Y")
 
-driver.implicitly_wait(10)
 
-def close_pop_up():
-    for i in range(1):
+
+def close_pop_up(driver):
         try: 
             
             #WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "//iframe[contains(@src, 'midasbuy.com/act/pagedoo/')]")))
@@ -41,7 +43,7 @@ def close_pop_up():
             close_pop_up_2 = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "cumulativeRecharge-close_1TD7P")))
             close_pop_up_2.click()
             print("pop up 2 close!")
-
+            
         except TimeoutException:
             print("gagal close pop up 2 !")
             pass
@@ -59,62 +61,76 @@ def close_pop_up():
             print("gagal close pop up 1 !")
             pass
         
-def log_in():
-    driver.find_element(By.XPATH, '//*[@id="MobileNav"]/div/div[2]/div[6]').click()
-    time.sleep(0.5)
-    driver.find_element(By.XPATH, '//*[@id="MobileNav"]/div/div[4]/div[2]/ul/li[1]/div/div').click()
-    time.sleep(0.5)
+def log_in(driver, email):
     try:
+        driver.find_element(By.XPATH, '//*[@id="MobileNav"]/div/div[2]/div[6]').click()
+        time.sleep(0.5)
+        driver.find_element(By.XPATH, '//*[@id="MobileNav"]/div/div[4]/div[2]/ul/li[1]/div/div').click()
+        time.sleep(0.5)
         driver.switch_to.frame('login-iframe')
+
         input_email = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div/div[3]/div/div/div/div[1]/p/input')))
         input_email.send_keys(email)
-        print("Berhasil Input Email !")
+        print(f"Berhasil Input Email {email} !")
+
+        driver.find_element(By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div/div[4]/div').click()
+        time.sleep(0.5)
+        input_pass = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[1]/div[2]/div[2]/div/input')))
+        input_pass.send_keys(input(f"Input Password : "))
+        time.sleep(0.5)
+
+        random_date = generate_random_date()
+        print("Tanggal : ", random_date)
+        date_input = driver.find_element(By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[1]/div[4]/div[2]/div[1]/div/input')
+        date_input.send_keys(random_date)
+        print("tanggal Oke !")
+        time.sleep(0.5)
+
+        cek_box = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[1]/div[5]/div[1]/div/div[1]')))
+        cek_box.click()
+
+        verif_email =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[2]/div')))
+        verif_email.click()
+        print(f"Gass Verif di {email} Ibox")
 
     except TimeoutException :
-        print("gagal Input Email !")
+        print(" Log in dan Input Email Gagal !")
 
-    driver.find_element(By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div/div[4]/div').click()
-    time.sleep(0.5)
-    input_pass = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[1]/div[2]/div[2]/div/input')))
-    input_pass.send_keys(input(f"Input Password : "))
-    time.sleep(0.5)
 
-    random_date = generate_random_date()
-    print("Tanggal : ", random_date)
-    date_input = driver.find_element(By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[1]/div[4]/div[2]/div[1]/div/input')
-    date_input.send_keys(random_date)
-    print("tanggal Oke !")
-    time.sleep(0.5)
+def main_prosess(email_list_file):
+    email_list = read_email_list(email_list_file)
+    email_index = 0
 
-    cek_box = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[1]/div[5]/div[1]/div/div[1]')))
-    cek_box.click()
+    while email_index < len(email_list):
+        email = email_list[email_index]
+        driver = create_driver()
+        try: 
+            driver.get('https://www.midasbuy.com/midasbuy/id/buy/pubgm')
+            close_pop_up(driver)
+            log_in(driver, email)
+        except Exception as e:
+            print(f"An Error Occured: {e}")
+        finally:
+            print(f"Proses untuk email {email} selesai. Lebokno 'neh' kango lanjut.")
+            while True:
+                user_input = input("Njalukmu opo cok : ").strip().lower()
+                if user_input =="neh":
+                    driver.quit()
+                    email_index += 1
+                    break
 
-    verif_email =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="login-sdk-app"]/div[1]/div/div[3]/div[2]/div')))
-    verif_email.click()
+                elif user_input =="wes":
+                    driver.quit()
+                    print("proses dihentikan")
+                    return
+                else:
+                    print("Lebokno 'neh' kango lanjut nek 'wes' kango mandek !")
 
-for email in email_list:
-    driver.get('https://www.midasbuy.com/midasbuy/id/buy/pubgm')
+    print("EMAIL ENTEK COK ! SESUK NEH !")
 
-def main_prosess():
-    while True:
 
-        close_pop_up()
-        log_in()
-        print(f"Proses untuk email {email} selesai. Masukkan 'next' Untuk lanjut.")
-        while True:
-            user_input = input("Input: ").strip().lower()
-            if user_input =="neh":
-                break
-            elif user_input =="wes":
-                print("proses dihentikan")
-                return
-            else:
-                print("Masukkan 'next' untuk lanjut dan 'stop' untuk berhenti!")
+if __name__ == "__main__":
+        email_list_file = "email.txt"
+        main_prosess(email_list_file)
 
-        print("WES BAR COK ! SESUK NEH !")
-        user_input = input("Njalukmu opo cok : ").strip().lower()
-        if user_input == "wes":
-            print("proses dihentikan")
-            return
 
-main_prosess()
