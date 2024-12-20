@@ -1,0 +1,7 @@
+cd Documents/automation/topup_royal
+python3 orange.py
+
+Catatan : pembayaran mesih Qris jadi masukkan Qris Dulu. Lainya menyusul
+
+		  denom mesih 10b Lainya menyusul !
+			 

@@ -36,15 +36,29 @@ def log_in(driver, user_id, password):
     click_login.click()
     print("Berhasil klik Login !")
 
-def order_item(driver) :
-        beli_10b = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div/div[3]/div[6]/div[3]/div[1]')))
-        beli_10b.click()
-        print("berhasil klik beli !") 
-        time.sleep(1)
-        
-        masukan_jumlah = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[1]/div[2]/div[2]/input')))
-        masukan_jumlah.send_keys("5")
-        print("Jumlah 5 berhasil input !")
+def order_item(driver, item, jumlah) :
+    xpath_dict = {
+        "120m": '//*[@id="app"]/div/div/div[3]/div[1]/div[3]/div[1]',
+        "250m": '//*[@id="app"]/div/div/div[3]/div[2]/div[3]/div[1]',
+        "500m": '//*[@id="app"]/div/div/div[3]/div[3]/div[3]/div[1]',
+        "1b": '//*[@id="app"]/div/div/div[3]/div[4]/div[3]/div[1]',
+        "5b": '//*[@id="app"]/div/div/div[3]/div[5]/div[3]/div[1]',
+        "10b": '//*[@id="app"]/div/div/div[3]/div[6]/div[3]/div[1]'
+    } 
+    
+    if item not in xpath_dict:
+        print(f"Blok ! {item} gak enek.")
+        return
+    
+    item_button = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.XPATH, xpath_dict[item])))
+    item_button.click()
+    print(f"{item} berhasil klik !") 
+    time.sleep(1)
+    
+    masukan_jumlah = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[1]/div[2]/div[2]/input')))
+    masukan_jumlah.clear()
+    masukan_jumlah.send_keys(jumlah)
+    print(f"Jumlah {jumlah} berhasil input untuk {item} !")
         
 def klik_pembayaran(driver, pilihan):
     
@@ -53,30 +67,65 @@ def klik_pembayaran(driver, pilihan):
         elemen_dana.click()
         print("dana di temukan")
         
+        klik_beli = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button')))
+        klik_beli.click()
+        print("berhasil klik tombol beli !")
+        time.sleep(1)
+        
+        klik_tentukan = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button[2]')))
+        klik_tentukan.click()
+        print("berhasil klik tombol Tentukan !")
+        time.sleep(20)
+        
     elif pilihan.lower() == "bank":
         elemen_bank = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[1]/div[6]/div[2]')))
         elemen_bank.click()
         print("bank di temukan")
+        
+        klik_beli = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button')))
+        klik_beli.click()
+        print("berhasil klik tombol beli !")
+        time.sleep(1)
+        
+        klik_tentukan = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button[2]')))
+        klik_tentukan.click()
+        print("berhasil klik tombol Tentukan !")
+        time.sleep(20)
         
     elif pilihan.lower() == "qris":
         elemen_qris = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[1]/div[6]/div[3]')))
         elemen_qris.click()
         print("qris di temukan")
         
+        klik_beli = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button')))
+        klik_beli.click()
+        print("berhasil klik tombol beli !")
+        time.sleep(1)
+        
+        klik_tentukan = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button[2]')))
+        klik_tentukan.click()
+        print("berhasil klik tombol Tentukan !")
+        time.sleep(12)
+        
+        # tabs = driver.window_handles
+        # print("Semua Tab yang Terbuka: ", tabs)
+        # driver.switch_to.window(tabs[-1])  # Pindah ke tab baru
+        # print("Berhasil pindah tab baru")
+        # time.sleep(2)
+        
+        # gambar = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.XPATH, '//div(@class="van-button__content")')))
+        # gambar.click()
+        # print(" qris unduh")
+        
+        # driver.close(tabs[-1])
+        # print("Berhasil close tab baru")
+        
+        # driver.switch_to.window(tabs[0])
+        # print("Berhasil pindah tab lama")
+        
     else:
         print("Pembayaran ora enek Blok !")
     
-def konfirmasi(driver):
-    
-    klik_beli = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button')))
-    klik_beli.click()
-    print("berhasil klik tombol beli !")
-    time.sleep(1)
-    
-    klik_tentukan = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button[2]')))
-    klik_tentukan.click()
-    print("berhasil klik tombol Tentukan !")
-    time.sleep(12)
     
 def close_tab(driver):
     pyautogui.click(567, 68)
@@ -98,6 +147,15 @@ def hitung_jumlah_order(jumlah_order):
 def main_process():
     driver = None
     logged_in = False
+    
+    jumlah_dict = {
+                    "120m": 1,
+                    "250m": 50,
+                    "500m": 25,
+                    "1b": 15,
+                    "5b": 10,
+                    "10b": 5
+                }
 
     try:
         while True:
@@ -109,7 +167,13 @@ def main_process():
                     print("Blok! Lebokno jumlah seng bener.")
             except ValueError:
                 print("Salah! Lebokno angka seng bener.")
-
+                
+            while True:
+                if item not in jumlah_dict:
+                    print("denom gak enk blok !")
+                    continue
+                
+        item = input("Masukkan Denom : ").strip()
         pilihan = input("Pembayaranmu opo Ndeng: ")
 
         if not logged_in:
@@ -127,11 +191,9 @@ def main_process():
             for i in range(jumlah_order):
                 print(f"Proses Order ke-{i + 1}...")
                 try:
-                    order_item(driver)
+                    order_item(driver, item, jumlah_dict[item])
                     time.sleep(2)
                     klik_pembayaran(driver, pilihan)
-                    time.sleep(2)
-                    konfirmasi(driver)
                     time.sleep(2)
                     close_tab(driver)
                     time.sleep(2)
@@ -141,11 +203,12 @@ def main_process():
                     print(f"Error order ke-{i + 1}: {e}")
                     break
 
-            user_input = input("Pie Bro? (neh/wes): ").strip().lower()
+            user_input = input("Pie Bro? neh/wes: ").strip().lower()
             if user_input == "neh":
                 try:
                     jumlah_order = int(input("Order Piro meneh: "))
                     if jumlah_order > 0:
+                        item = input("Masukkan Denom : ").strip()
                         pilihan = input("Pembayaranmu opo Ndeng: ")
                     else:
                         print("Lebokno jumlah seng bener.")
@@ -154,7 +217,7 @@ def main_process():
                     print("Blok ! seng bener cok, ojo ngelamun jorok ")
                     continue
             elif user_input == "wes":
-                print("Menutup driver dan keluar.")
+                print("Matur Suwun Sek. Agus nih Boss. TAMPLING Dong. Muahh ")
                 break
             else:
                 print("Input Salah. Lebokno 'neh' atau 'wes'.")
