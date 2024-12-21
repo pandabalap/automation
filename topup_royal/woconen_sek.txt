@@ -1,7 +1,24 @@
 cd Documents/automation/topup_royal
 python3 orange.py
 
-Catatan : pembayaran mesih Qris jadi masukkan Qris Dulu. Lainya menyusul
 
-		  denom mesih 10b Lainya menyusul !
+
+CATATAN !!!
+
+Diisi / ketik sesuai permintaan bot boy  !
+
+
+
+Pembayaran : 
+
+dana : belum otomatis tp bisa di gunakan 
+Bank : sama
+Qris : bisa di gunakan, aman panting browser gak di pinda-pandah 
+
+
+Denom bisa pilih , dan setelah order bisa di pilih lagi
+
+
+
+		 
 			 
