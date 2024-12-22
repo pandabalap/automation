@@ -12,6 +12,8 @@ import pyautogui
 user_id = "MD1005227"
 password = "samakontlo1"
 
+nomor_dana = "89615140952"
+
 def create_driver():
     options = webdriver.ChromeOptions()
     options.add_experimental_option('detach', True)
@@ -75,7 +77,28 @@ def klik_pembayaran(driver, pilihan):
         klik_tentukan = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button[2]')))
         klik_tentukan.click()
         print("berhasil klik tombol Tentukan !")
+        time.sleep(2)
+        
+        #klik konfirmasi
+        pyautogui.click(600, 910)
+        time.sleep(2)
+        
+        #klik input dana
+        pyautogui.click(710, 510)
+        time.sleep(2)
+        
+        #tulis no dana
+        pyautogui.write(nomor_dana)
+        time.sleep(5)
+        
+        #klik Continue
+        pyautogui.click(750, 865)
         time.sleep(20)
+        
+        #close tab dana
+        pyautogui.click(805, 67)
+        time.sleep(2)
+        
         
     elif pilihan.lower() == "bank":
         elemen_bank = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[1]/div[6]/div[2]')))
@@ -89,7 +112,15 @@ def klik_pembayaran(driver, pilihan):
         
         klik_tentukan = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button[2]')))
         klik_tentukan.click()
-        print("berhasil klik tombol Tentukan !")
+        print("berhasil klik tombol Tentukan !")  
+        time.sleep(6)
+        
+        #klik konfirmasi
+        pyautogui.click(600, 910)
+        time.sleep(2)
+        
+        #salin/copy
+        pyautogui.click(755, 500)
         time.sleep(20)
         
     elif pilihan.lower() == "qris":
@@ -150,9 +181,9 @@ def main_process():
     
     jumlah_dict = {
                     "120m": 1,
-                    "250m": 50,
-                    "500m": 25,
-                    "1b": 15,
+                    "250m": 100,
+                    "500m": 100,
+                    "1b": 50,
                     "5b": 10,
                     "10b": 5
                 }
