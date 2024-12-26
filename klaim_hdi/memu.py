@@ -8,7 +8,7 @@ desired_caps = {
     "platformName": "Android",       # Platform yang digunakan
     "deviceName": "Android Device",   # Nama perangkat emulator
     "appPackage": "com.neptune.dominogl",  # Ganti dengan package aplikasi yang dituju
-    # "appActivity": "com.pokercity.lobby.lobby",   # Ganti dengan activity utama aplikasi
+    "appActivity": "com.pokercity.lobby.lobby",   # Ganti dengan activity utama aplikasi
     "udid": "127.0.0.1:26625",
     "automationName": "UiAutomator2",
     "noReset": True                   # Tidak mengatur ulang data aplikasi
