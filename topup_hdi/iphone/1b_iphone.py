@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 import time
 
+
 def log_in(user_id, password):
     wait = WebDriverWait(driver, 10)
     wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'login-text'))).click()

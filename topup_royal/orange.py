@@ -172,15 +172,16 @@ def close_tab(driver):
 
     
 def hitung_jumlah_order(jumlah_order):
-    total = jumlah_order * 10
-    return total
+    isi_per_item = {
+        ""
+    }
 
 def main_process():
     driver = None
     logged_in = False
     
     jumlah_dict = {
-                    "120m": 1,
+                    "120m": 100,
                     "250m": 100,
                     "500m": 100,
                     "1b": 50,
