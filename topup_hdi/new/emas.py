@@ -147,7 +147,7 @@ def klik_pembayaran(driver, pilihan):
         
 def close_tab():
     pyautogui.click(567, 68)
-    time.sleep(1)
+    time.sleep(0.8)
     print("Berhasil close tab !")
     
 def hitung_jumlah_order(item, jumlah_order):
@@ -184,8 +184,11 @@ def main_proses():
             driver = create_driver()
             driver.get('https://trade.topbos.com/index.html')
             
-            for i in range(5):
-                pyautogui.hotkey('command', '-', interval=0.2)
+            # Untuk Zoom Out
+            driver.execute_script("document.body.style.zoom='50%'")
+            time.sleep(0.5)
+            # for i in range(5):
+            #     pyautogui.hotkey('command', '-', interval=0.2)
                     
             time.sleep(1)
             log_in(driver, user_id, password)
@@ -196,11 +199,11 @@ def main_proses():
                 print(f"Proses Order ke-{i + 1}...")
                 try:
                     order_item(driver, item, jumlah_klik=5)
-                    time.sleep(2)
+                    time.sleep(0.8)
                     klik_pembayaran(driver, pilihan)
-                    time.sleep(2)
+                    time.sleep(0.8)
                     close_tab()
-                    time.sleep(1)
+                    time.sleep(0.8)
                     driver.refresh()
                     total_order = hitung_jumlah_order(item, jumlah_order)
                     print(f"Order ke-{i + 1} Gacorr !.")
@@ -212,7 +215,7 @@ def main_proses():
             user_input = input("Pie Bro? neh/wes: ").strip().lower()
             if user_input == "neh":
                 try:
-                    jumlah_order = int(input("Order Piro: "))
+                    jumlah_order = int(input("Order Piro Meneh ? : "))
                     item = input("Masukkan Denom : ").strip()
                     pilihan = input("Pembayaranmu opo ? : ")
                 except ValueError:

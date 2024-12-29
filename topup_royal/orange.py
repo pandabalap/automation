@@ -77,7 +77,7 @@ def klik_pembayaran(driver, pilihan):
         klik_tentukan = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[1]/div[3]/button[2]')))
         klik_tentukan.click()
         print("berhasil klik tombol Tentukan !")
-        time.sleep(2)
+        time.sleep(8)
         
         #klik konfirmasi
         pyautogui.click(600, 910)
@@ -160,14 +160,13 @@ def klik_pembayaran(driver, pilihan):
     
 def close_tab(driver):
     pyautogui.click(567, 68)
-    time.sleep(1)
+    time.sleep(0.8)
     print("Berhasil close tab !")
-    time.sleep(1)
     
     klik_close_reset = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="app"]/div/div/div[3]/div[10]/div[3]/div/span')))
     klik_close_reset.click()
     print("berhasil klik tombol close Reset !")
-    time.sleep(1)
+    time.sleep(0.5)
     
 
     
@@ -206,14 +205,16 @@ def main_process():
                     continue
                 
         item = input("Masukkan Denom : ").strip()
-        pilihan = input("Pembayaranmu opo Ndeng: ")
+        pilihan = input("Pembayaranmu opo ? : ")
 
         if not logged_in:
             driver = create_driver()
             driver.get('http://rd.mitrard.win/MallGoods')
-
-            for i in range(5):
-                pyautogui.hotkey('command', '-', interval=0.2)
+            
+            driver.execute_script("document.body.style.zoom='50%'")
+            time.sleep(0.5)
+            # for i in range(5):
+            #     pyautogui.hotkey('command', '-', interval=0.2)
 
             time.sleep(1)
             log_in(driver, user_id, password)
@@ -224,11 +225,11 @@ def main_process():
                 print(f"Proses Order ke-{i + 1}...")
                 try:
                     order_item(driver, item, jumlah_dict[item])
-                    time.sleep(2)
+                    time.sleep(0.8)
                     klik_pembayaran(driver, pilihan)
-                    time.sleep(2)
+                    time.sleep(0.8)
                     close_tab(driver)
-                    time.sleep(2)
+                    time.sleep(0.8)
                     driver.refresh()
                     print(f"Order ke-{i + 1} Gacorr !.")
                 except Exception as e:
@@ -241,7 +242,7 @@ def main_process():
                     jumlah_order = int(input("Order Piro meneh: "))
                     if jumlah_order > 0:
                         item = input("Masukkan Denom : ").strip()
-                        pilihan = input("Pembayaranmu opo Ndeng: ")
+                        pilihan = input("Pembayaranmu opo ? : ")
                     else:
                         print("Lebokno jumlah seng bener.")
                         continue
