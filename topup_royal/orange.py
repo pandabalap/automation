@@ -216,14 +216,18 @@ def main_process():
             # for i in range(5):
             #     pyautogui.hotkey('command', '-', interval=0.2)
 
-            time.sleep(1)
             log_in(driver, user_id, password)
             logged_in = True
+            time.sleep(1)
 
         while True:
             for i in range(jumlah_order):
                 print(f"Proses Order ke-{i + 1}...")
                 try:
+                    # Untuk Zoom Out
+                    driver.execute_script("document.body.style.zoom='50%'")
+                    time.sleep(0.5)
+                    
                     order_item(driver, item, jumlah_dict[item])
                     time.sleep(0.8)
                     klik_pembayaran(driver, pilihan)

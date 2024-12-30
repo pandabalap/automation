@@ -77,7 +77,7 @@ def klik_pembayaran(driver, pilihan):
         klik_beli = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By. XPATH, '//*[@id="buyItem"]/aside/a')))
         klik_beli.click()
         print("berhasil klik tombol Top up !")
-        time.sleep(1)
+        time.sleep(8)
         
         #klik input dana
         pyautogui.click(600, 445)
@@ -192,12 +192,17 @@ def main_proses():
                     
             time.sleep(1)
             log_in(driver, user_id, password)
+                        
             logged_in = True
             
         while True:
             for i in range(jumlah_order):
                 print(f"Proses Order ke-{i + 1}...")
                 try:
+                    # Untuk Zoom Out
+                    driver.execute_script("document.body.style.zoom='50%'")
+                    time.sleep(0.5)
+                    
                     order_item(driver, item, jumlah_klik=5)
                     time.sleep(0.8)
                     klik_pembayaran(driver, pilihan)
