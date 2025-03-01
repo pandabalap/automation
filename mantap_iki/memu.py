@@ -4,6 +4,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 import configparser
 import threading
+import argparse
+import subprocess
 
 # Koordinat untuk mengklik (contoh klik inbox pada game)
 klik_inbox = {"x" : 970 ,"y": 825}
@@ -125,6 +127,13 @@ def main_proses():
     config.read("config.cfg")
     sections = config.sections()
     
+    #input pilih mode 
+    print("Pilih Proses: \n1. Satu saja\n2. Semua")
+    mode = input("Pilih mode (1/2): ").strip()
+    if mode not in ["1", "2"]:
+        print("Pilihan tidak valid. Keluar.")
+        return
+    
     jumlah_klaim = 0
     while True:
             try :
@@ -135,17 +144,29 @@ def main_proses():
                     print("ulangi !")
                     
             except ValueError :
-                print("Salah blok, masukkan angka ")
-    
-    #treading
-    threads = []
-    for section in sections:
-        thread = threading.Thread(target=worker, args=(section, jumlah_klaim))
-        threads.append(thread)
-        thread.start()
-    
-    for thread in threads:
-        thread.join()
-        
+                print("Salah blok, masukkan angka. Ulangi ! ")
+                
+    if mode == "1":
+        # Mode jalankan satu emulator
+        print("Daftar sections: ", sections)
+        section = input("Masukkan section yang akan dijalankan: ").strip()
+        if section not in sections:
+            print("Section tidak valid. Keluar.")
+            return section
+
+        # Jalankan satu section
+        worker(section, jumlah_klaim)
+    else:
+        # Mode jalankan semua emulator
+        threads = []
+        for section in sections:
+            thread = threading.Thread(target=worker, args=(section, jumlah_klaim))
+            threads.append(thread)
+            thread.start()
+
+        # Tunggu semua thread selesai
+        for thread in threads:
+            thread.join()
+
 if __name__ == "__main__":
     main_proses()
